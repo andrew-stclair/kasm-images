@@ -20,8 +20,7 @@ jobs:
           - citrix-workspace
           - osint-tools
         base_tag: [
-          1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily,
-          1.18.1,1.18.1-rolling-weekly,1.18.1-rolling-daily
+          1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily
         ]
 
     steps:
