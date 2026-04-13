@@ -16,7 +16,13 @@ jobs:
 
     strategy:
       matrix:
-        base_tag: [1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily]
+        container:
+          - citrix-workspace
+          - osint-tools
+        base_tag: [
+          1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily,
+          1.18.1,1.18.1-rolling-weekly,1.18.1-rolling-daily
+        ]
 
     steps:
       - name: Checkout repository
@@ -32,9 +38,9 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./citrix-workspace
+          context: ./${{ matrix.container }}
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/citrix-workspace:${{ matrix.base_tag }}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/${{ matrix.container }}:${{ matrix.base_tag }}
           build-args: |
             BASE_IMAGE=core-ubuntu-noble
             BASE_TAG=${{ matrix.base_tag }}
