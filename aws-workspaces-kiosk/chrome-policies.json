@@ -1,0 +1,7 @@
+{
+    "CommandLineFlagSecurityWarningsEnabled": false,
+    "DefaultBrowserSettingEnabled": false,
+    "PrivacySandboxPromptEnabled": false,
+    "PasswordManagerEnabled": false,
+    "SyncDisabled": true
+}

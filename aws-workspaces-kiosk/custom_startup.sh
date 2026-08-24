@@ -1,35 +1,25 @@
 #!/usr/bin/env bash
-# Turns the desktop into a single-purpose kiosk that shows only the AWS
-# WorkSpaces web client - no panel, no desktop icons, no browser chrome.
-set -x
+# Mirrors kasmweb/chrome's own startup loop, but launches in --kiosk mode
+# locked to a single URL instead of a normal maximized browser window.
+set -ex
 
-export DISPLAY=${DISPLAY:-:1}
+START_COMMAND="google-chrome-stable"
+PGREP="chrome"
+# password-store=basic avoids Chrome prompting to unlock/create an OS keyring
+ARGS="--kiosk --start-fullscreen --window-position=0,0 --no-first-run --noerrdialogs --disable-infobars --disable-translate --disable-session-crashed-bubble --overscroll-history-navigation=0 --password-store=basic --no-sandbox"
+URL="${AWS_WORKSPACES_URL}"
 
-# Wait for the X server to be ready before touching the desktop session.
-for i in $(seq 1 60); do
-    xset q >/dev/null 2>&1 && break
+echo "Entering process startup loop"
+set +x
+while true
+do
+    if ! pgrep -x $PGREP > /dev/null
+    then
+        /usr/bin/filter_ready
+        /usr/bin/desktop_ready
+        set +e
+        $START_COMMAND $ARGS "$URL"
+        set -e
+    fi
     sleep 1
-done
-
-# Give XFCE a moment to finish starting, then strip it down to bare desktop.
-sleep 3
-pkill -f xfce4-panel >/dev/null 2>&1
-pkill -f xfdesktop >/dev/null 2>&1
-
-# Launch the browser full screen with no address bar/tabs/menus, restarting
-# it automatically if it ever exits.
-while true; do
-    google-chrome-stable \
-        --no-sandbox \
-        --kiosk \
-        --no-first-run \
-        --noerrdialogs \
-        --disable-infobars \
-        --disable-translate \
-        --disable-session-crashed-bubble \
-        --overscroll-history-navigation=0 \
-        --start-fullscreen \
-        --window-position=0,0 \
-        "${AWS_WORKSPACES_URL}"
-    sleep 2
 done

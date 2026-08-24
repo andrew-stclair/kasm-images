@@ -20,6 +20,11 @@ RUN apt-get update \
     && rm -f /tmp/google-chrome-stable_current_amd64.deb \
     && apt-get -y autoremove && apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Managed policies to disable the password manager/first-run prompts (avoids
+# Chrome asking to unlock/create an OS keyring wallet on first launch)
+RUN mkdir -p /etc/opt/chrome/policies/managed
+COPY ./chrome-policies.json /etc/opt/chrome/policies/managed/policies.json
+
 # Replace the default session startup with our kiosk-only startup
 COPY ./custom_startup.sh $STARTUPDIR/custom_startup.sh
 RUN chmod +x $STARTUPDIR/custom_startup.sh
