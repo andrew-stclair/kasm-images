@@ -21,7 +21,8 @@ jobs:
           - osint-tools
           - aws-workspaces-kiosk
         base_tag: [
-          1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily
+          1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily,
+          1.19.0,1.19.0-rolling-weekly,1.19.0-rolling-daily
         ]
 
     steps:
