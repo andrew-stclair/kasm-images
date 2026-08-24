@@ -19,6 +19,7 @@ jobs:
         container:
           - citrix-workspace
           - osint-tools
+          - aws-workspaces-kiosk
         base_tag: [
           1.18.0,1.18.0-rolling-weekly,1.18.0-rolling-daily
         ]
