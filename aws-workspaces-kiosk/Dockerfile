@@ -13,6 +13,11 @@ WORKDIR $HOME
 # URL the kiosk browser opens on startup
 ENV AWS_WORKSPACES_URL=https://ap-southeast-2.webclient.amazonworkspaces.com
 
+# Configure XFCE for single-app mode (no panel/taskbar, app fills the screen)
+RUN cp $HOME/.config/xfce4/xfconf/single-application-xfce-perchannel-xml/* $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/ \
+    && apt-get remove -y xfce4-panel \
+    && apt-get -y autoremove && apt-get -y clean && rm -rf /var/lib/apt/lists/*
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && wget -q -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
